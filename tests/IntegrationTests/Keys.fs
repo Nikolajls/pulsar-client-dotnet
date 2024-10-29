@@ -94,8 +94,8 @@ let tests =
             let producerTask =
                 Task.Run(fun () ->
                     task {
-                        let firstKey = "111111"
-                        let secondKey = "444444"
+                        let firstKey = "key-12"
+                        let secondKey = "key-45"
                         let getMessageBuilder key i =
                             producer.NewMessage(Encoding.UTF8.GetBytes(key + "Hello" + i), key)
                         let! _ = producer.SendAsync(getMessageBuilder firstKey "0")
@@ -113,7 +113,7 @@ let tests =
                         let! msg1 = consumer1.ReceiveAsync()
                         let! msg2 = consumer1.ReceiveAsync()
                         let! msg3 = consumer1.ReceiveAsync()
-                        let prefix = (string msg1.Key).Substring(0,6)
+                        let prefix = string msg1.Key
                         [msg1;msg2;msg3]
                             |> List.iteri
                             (fun i elem ->
@@ -133,7 +133,7 @@ let tests =
                         let! msg1 = consumer2.ReceiveAsync()
                         let! msg2 = consumer2.ReceiveAsync()
                         let! msg3 = consumer2.ReceiveAsync()
-                        let prefix = (string msg1.Key).Substring(0,6)
+                        let prefix = string msg1.Key
                         [msg1;msg2;msg3]
                             |> List.iteri
                             (fun i elem ->
@@ -191,8 +191,8 @@ let tests =
             let producerTask =
                 Task.Run(fun () ->
                     task {
-                        let firstKey = "111111"
-                        let secondKey = "444444"
+                        let firstKey = "asdfasdfasdfasdf"
+                        let secondKey = "12312"
                         let getMessageBuilder key i =
                             producer.NewMessage(Encoding.UTF8.GetBytes(key + "Hello" + i), key)
                         let! _ = producer.SendAndForgetAsync(getMessageBuilder firstKey "0")
@@ -210,7 +210,7 @@ let tests =
                         let! msg1 = consumer1.ReceiveAsync()
                         let! msg2 = consumer1.ReceiveAsync()
                         let! msg3 = consumer1.ReceiveAsync()
-                        let prefix = (string msg1.Key).Substring(0,6)
+                        let prefix = string msg1.Key
                         [msg1;msg2;msg3]
                             |> List.iteri
                             (fun i elem ->
@@ -230,7 +230,7 @@ let tests =
                         let! msg1 = consumer2.ReceiveAsync()
                         let! msg2 = consumer2.ReceiveAsync()
                         let! msg3 = consumer2.ReceiveAsync()
-                        let prefix = (string msg1.Key).Substring(0,6)
+                        let prefix = string msg1.Key
                         [msg1;msg2;msg3]
                             |> List.iteri
                             (fun i elem ->
@@ -288,8 +288,8 @@ let tests =
             let producerTask =
                 Task.Run(fun () ->
                     task {
-                        let firstKey = "111111"
-                        let secondKey = "444444"
+                        let firstKey = "asdfasdfasdfasdf"
+                        let secondKey = "12312"
                         let getMessageBuilder key i =
                             producer.NewMessage(Encoding.UTF8.GetBytes(key + "Hello" + i), i, orderingKey = Encoding.UTF8.GetBytes(key))
                         let! _ = producer.SendAndForgetAsync(getMessageBuilder firstKey "0")
