@@ -449,8 +449,7 @@ let tests =
             description |> logTestEnd
         }
 
-        // TODO make active if server updated to 2.10.0 or newer
-        ptestTask "Dead-letter initial subscription is created" {
+        testTask "Dead-letter initial subscription is created" {
 
             let description = "When the dead-letter policy has an initial subscription, dlq messages are not dropped"
 
