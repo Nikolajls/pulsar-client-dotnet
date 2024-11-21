@@ -708,6 +708,7 @@ type internal ProducerImpl<'T> private (producerConfig: ProducerConfiguration, c
                     let pendingMessage = pendingMessages.Peek()
                     let expectedSequenceId = getHighestSequenceId pendingMessage
                     if sequenceId = expectedSequenceId then
+                        dequeuePendingMessage pendingMessage
                         failPendingMessage pendingMessage (
                             prefix + ": the size of the message is not allowed" |> NotAllowedException
                         )
