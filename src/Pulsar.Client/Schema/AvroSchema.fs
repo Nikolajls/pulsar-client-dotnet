@@ -43,7 +43,7 @@ type internal AvroSchema<'T> private (schema: Schema, avroReader: DatumReader<'T
     override this.Encode value =
         if parameterIsClass && (isNull <| box value) then
             raise <| SchemaSerializationException "Need Non-Null content value"
-        use stream = MemoryStreamManager.GetStream()
+        use stream = MemoryStreamManager.GetStream("AvroEncode")
         avroWriter.Write(value, BinaryEncoder(stream))
         stream.ToArray()
     override this.Decode bytes =

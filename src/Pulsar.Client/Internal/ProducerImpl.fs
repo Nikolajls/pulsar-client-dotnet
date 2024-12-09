@@ -222,7 +222,7 @@ type internal ProducerImpl<'T> private (producerConfig: ProducerConfiguration, c
 
     let verifyIfLocalBufferIsCorrupted (msg: PendingMessage<'T>) =
         backgroundTask {
-            use stream = MemoryStreamManager.GetStream()
+            use stream = MemoryStreamManager.GetStream("VerifyBuffer")
             use reader = new BinaryReader(stream)
             let struct(send, _) = msg.SendTask
             let writer = PipeWriter.Create(stream, StreamPipeWriterOptions(leaveOpen = true))
@@ -590,7 +590,7 @@ type internal ProducerImpl<'T> private (producerConfig: ProducerConfiguration, c
                 let nonRetriableError = ex |> PulsarClientException.isRetriableError |> not
                 let timeout = Stopwatch.GetElapsedTime(createProducerStartTime) > clientConfig.OperationTimeout
                 if ((nonRetriableError || timeout) && producerCreatedTsc.TrySetException(ex)) then
-                    Log.Logger.LogInformation("{0} creation failed {1}", prefix,
+                    Log.Logger.LogInformation("{0} connection failed {1}", prefix,
                                                 if nonRetriableError then "with unretriableError" else "after timeout")
                     connectionHandler.Failed()
                     stopProducer()

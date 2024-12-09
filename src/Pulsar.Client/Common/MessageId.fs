@@ -66,7 +66,7 @@ type MessageId =
                 data.FirstChunkMessageId <- chunkMsgIds.[0].GetMessageIdData()
             | _ ->
                 ()
-            use stream = MemoryStreamManager.GetStream()
+            use stream = MemoryStreamManager.GetStream("ToByteArray")
             Serializer.Serialize(stream, data)
             stream.ToArray()
         static member FromByteArray (data: byte[]) =

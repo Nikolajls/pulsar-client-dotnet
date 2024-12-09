@@ -55,6 +55,7 @@ type internal TransactionMetaStoreHandler(clientConfig: PulsarClientConfiguratio
     let pendingRequests = Dictionary<RequestId, TaskCompletionSource<TxnRequest>>()
     let blockedRequests = Queue<TransactionMetaStoreMessage>()
     let timeoutQueue = Queue<TransRequestTime>()
+    let createTmsHandlerStartTime = Stopwatch.GetTimestamp()
 
     let connectionHandler =
         ConnectionHandler(prefix,
@@ -143,9 +144,14 @@ type internal TransactionMetaStoreHandler(clientConfig: PulsarClientConfiguratio
 
             | TransactionMetaStoreMessage.ConnectionFailed ex ->
 
-                Log.Logger.LogError(ex, "{0} connection failed.", prefix)
-                connectionHandler.Failed()
-                transactionCoordinatorCreatedTsc.TrySetException(ex) |> ignore
+                Log.Logger.LogDebug("{0} ConnectionFailed", prefix)
+                let nonRetriableError = ex |> PulsarClientException.isRetriableError |> not
+                let timeout = Stopwatch.GetElapsedTime(createTmsHandlerStartTime) > clientConfig.OperationTimeout
+                if ((nonRetriableError || timeout) && transactionCoordinatorCreatedTsc.TrySetException(ex)) then
+                    Log.Logger.LogInformation("{0} connection failed {1}", prefix,
+                                                if nonRetriableError then "with unretriableError" else "after timeout")
+                    connectionHandler.Failed()
+                    continueLoop <- false
 
             | TransactionMetaStoreMessage.ConnectionClosed clientCnx ->
 

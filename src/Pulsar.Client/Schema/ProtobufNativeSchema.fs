@@ -64,7 +64,7 @@ type internal ProtoBufNativeSchema<'T > () =
                 set.Add protoFileName |> ignore
                 set.Process()
 
-                use stream = MemoryStreamManager.GetStream()
+                use stream = MemoryStreamManager.GetStream("ProtobufGetDescriptor")
                 Serializer.Serialize(stream, set)
 
                 ProtobufNativeSchemaData (stream.ToArray (), userClassNamespace + "." + userClassName, protoFileName)
@@ -82,7 +82,7 @@ type internal ProtoBufNativeSchema<'T > () =
     override this.Encode value =
         if parameterIsClass && (isNull <| box value) then
             raise <| SchemaSerializationException "Need Non-Null content value"
-        use stream = MemoryStreamManager.GetStream()
+        use stream = MemoryStreamManager.GetStream("ProtobufEncode")
         Serializer.Serialize(stream, value)
         stream.ToArray()
 

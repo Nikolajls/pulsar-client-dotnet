@@ -121,7 +121,7 @@ type internal DefaultBatchMessageContainer<'T>(prefix: string, config: ProducerC
         this.IsBatchFull()
     override this.CreateOpSendMsg () =
         let lowestSequenceId = batchItems[0].SequenceId
-        let stream = MemoryStreamManager.GetStream()
+        let stream = MemoryStreamManager.GetStream("DefaultBatcher")
         let highestSequenceId = batchItems[batchItems.Count - 1].SequenceId
         {
             OpSendMsg = makeBatch stream batchItems
@@ -184,7 +184,7 @@ type internal KeyBasedBatchMessageContainer<'T>(prefix: string, config: Producer
     override this.CreateOpSendMsgs () =
         keyBatchItems
         |> Seq.map (fun (KeyValue(_, batchItems)) ->
-            let stream = MemoryStreamManager.GetStream()
+            let stream = MemoryStreamManager.GetStream("KeyBasedBatcher")
             let lowestSequenceId = batchItems[0].SequenceId
             let highestSequenceId = batchItems[batchItems.Count - 1].SequenceId
             {
