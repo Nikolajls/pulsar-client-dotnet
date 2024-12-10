@@ -86,6 +86,7 @@ Features list (based on [Client Feature Matrix](https://github.com/apache/pulsar
     1. Ensure `public/retention` namespace with time or storage size retention configured
  - Send a Pull Request
 
-#### Maintaners
+#### Maintaners and support
 
-  * @Lanayx (only maintaining). If you want me to **implement new features**, this can be arranged on a paid basis, please PM [in Telegram](https://t.me/Lanayx)
+  * You can suppport me (@Lanayx) using [Github sponsors](https://github.com/sponsors/Lanayx) so I continue maintaining this project well.
+  * If you want me to **implement new (missing) features**, this can be arranged on a paid basis using [Github sponsors](https://github.com/sponsors/Lanayx) as well, please PM [in Telegram](https://t.me/Lanayx)
